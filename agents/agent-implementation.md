@@ -37,6 +37,9 @@ After implementing and before finalizing, audit your code against each of the fo
 8. Are parameterizations minimal, or does the code accept configuration it doesn't need?
 9. Is the code modular and composable?
 10. Does the code do more than the specification requires?
+11. Does any function return a constant, identity, or placeholder instead of computing the specified result?
+12. Does any function reduce a non-trivial specification to a linear or single-operation shortcut that bypasses the described logic?
+13. Does any function delegate its core responsibility to the caller or to a later stage rather than implementing it?
 
 The architecture and specification agents have already made structural and interface decisions. Follow them. If you encounter a specification that seems incorrect or incomplete, note it in your report rather than improvising a solution.
 

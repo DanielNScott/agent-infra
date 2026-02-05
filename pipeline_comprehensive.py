@@ -5,8 +5,9 @@ Runs architecture, specification, and implementation agents in sequence.
 """
 
 import argparse
-import re
 from claude_runner import run_agent, find_latest_report, archive_reports
+from claude_runner import WORKSPACE_DIR
+from validate import validate_stage, get_modules_from_specs
 
 
 def parse_module_spec(spec):
@@ -16,10 +17,10 @@ def parse_module_spec(spec):
     return [s.strip() for s in spec.split(",")]
 
 
-def get_module_ids(report_path):
-    """Extract module names from specification report headings like '## Module name'."""
-    text = report_path.read_text()
-    return re.findall(r'^##\s+Module\s+(\S+)', text, re.MULTILINE)
+def get_module_ids(project):
+    """Extract module names from spec files or resources.txt."""
+    planning_dir = WORKSPACE_DIR / project / "planning"
+    return get_modules_from_specs(planning_dir)
 
 
 # Pipeline stages
@@ -55,10 +56,23 @@ def run_implement(project, module_name):
     return run_agent("agent-implementation", f"module={module_name}", project)
 
 
+def check_stage(project, stage):
+    """Validate stage output. Print results, return True if passed."""
+    passed, errors = validate_stage(project, stage)
+    if passed:
+        print(f"  Validation: PASS ({stage})")
+        return True
+    print(f"  Validation: FAIL ({stage})")
+    for e in errors:
+        print(f"    - {e}")
+    return False
+
+
 # Pipeline execution
 
 def run_pipeline(project, task=None, modules=None, only_architecture=False,
-                 only_spec_structural=False, only_spec_detail=False, only_implement=False):
+                 only_spec_structural=False, only_spec_detail=False, only_implement=False,
+                 plan_only=False):
     """Execute pipeline stages based on options."""
 
     # Single stage modes
@@ -66,13 +80,22 @@ def run_pipeline(project, task=None, modules=None, only_architecture=False,
         if not task:
             print("Error: --only-architecture requires --task")
             return 1
-        return run_architecture(project, task)
+        ret = run_architecture(project, task)
+        if ret != 0:
+            return ret
+        return 0 if check_stage(project, "architecture") else 1
 
     if only_spec_structural:
-        return run_spec_structural(project)
+        ret = run_spec_structural(project)
+        if ret != 0:
+            return ret
+        return 0 if check_stage(project, "spec-structural") else 1
 
     if only_spec_detail:
-        return run_spec_detail(project)
+        ret = run_spec_detail(project)
+        if ret != 0:
+            return ret
+        return 0 if check_stage(project, "spec-detail") else 1
 
     if only_implement:
         if not modules:
@@ -93,24 +116,30 @@ def run_pipeline(project, task=None, modules=None, only_architecture=False,
     ret = run_architecture(project, task)
     if ret != 0:
         return ret
+    if not check_stage(project, "architecture"):
+        return 1
 
     # Step 2: Specification structural pass
     ret = run_spec_structural(project)
     if ret != 0:
         return ret
+    if not check_stage(project, "spec-structural"):
+        return 1
 
     # Step 3: Specification detail pass
     ret = run_spec_detail(project)
     if ret != 0:
         return ret
+    if not check_stage(project, "spec-detail"):
+        return 1
+
+    if plan_only:
+        print("\n=== Plan complete (architecture + specification) ===")
+        return 0
 
     # Step 4: Implement modules
     if modules is None:
-        spec_report = find_latest_report("*_agent-specification_*.md", project)
-        if not spec_report:
-            print("Error: Specification did not produce a report")
-            return 1
-        modules = get_module_ids(spec_report)
+        modules = get_module_ids(project)
 
     if not modules:
         print("No modules found to implement")
@@ -140,6 +169,7 @@ if __name__ == "__main__":
         epilog="""
 Examples:
   ./pipeline_comprehensive.py --project myproj --task "Build feature X"
+  ./pipeline_comprehensive.py --project myproj --task "Build feature X" --plan-only
   ./pipeline_comprehensive.py --project myproj --task "Build feature X" --modules mod_a,mod_b
   ./pipeline_comprehensive.py --project myproj --only-architecture --task "task"
   ./pipeline_comprehensive.py --project myproj --only-spec-structural
@@ -162,6 +192,7 @@ Pipeline stages:
     parser.add_argument("--only-spec-structural", action="store_true", help="Run only structural specification")
     parser.add_argument("--only-spec-detail", action="store_true", help="Run only detail specification")
     parser.add_argument("--only-implement", action="store_true", help="Run only implementation")
+    parser.add_argument("--plan-only", action="store_true", help="Run architecture and specification only, no implementation")
     parser.add_argument("--restart", action="store_true", help="Archive old reports before starting")
 
     args = parser.parse_args()
@@ -178,5 +209,6 @@ Pipeline stages:
         only_architecture=args.only_architecture,
         only_spec_structural=args.only_spec_structural,
         only_spec_detail=args.only_spec_detail,
-        only_implement=args.only_implement
+        only_implement=args.only_implement,
+        plan_only=args.plan_only
     ))

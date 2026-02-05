@@ -44,7 +44,7 @@ For each function, specify:
 - Return value with type and brief description
 - Read, write, and create semantics for data
 
-Organize specifications into `specs/spec_pkg_[name]/spec_mod_[mod].txt` files.
+Organize specifications into spec files under `specs/`. For flat projects (no packages), use `specs/spec_mod_[mod].txt`. For hierarchical projects, use `specs/spec_pkg_[name]/spec_mod_[mod].txt`.
 
 ## Output
 
@@ -55,7 +55,8 @@ Structural pass produces or updates:
 - `/workspace/planning/defuse.txt`
 
 Detail pass produces or updates:
-- `/workspace/planning/specs/spec_pkg_[name]/spec_mod_[mod].txt`
+- Flat projects: `/workspace/planning/specs/spec_mod_[mod].txt`
+- Hierarchical projects: `/workspace/planning/specs/spec_pkg_[name]/spec_mod_[mod].txt`
 
 Follow the formatting conventions in `/data/agent-docs/planning.md`: indentation conveys hierarchy, minimal comments, `#` annotations.
 
