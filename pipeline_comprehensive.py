@@ -99,8 +99,10 @@ def run_pipeline(project, task=None, modules=None, only_architecture=False,
 
     if only_implement:
         if not modules:
-            print("Error: --only-implement requires --modules")
-            return 1
+            modules = get_module_ids(project)
+            if not modules:
+                print("Error: no modules found in specs/")
+                return 1
         for mod in modules:
             ret = run_implement(project, mod)
             if ret != 0:
