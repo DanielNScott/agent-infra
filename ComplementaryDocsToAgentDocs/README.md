@@ -1,12 +1,12 @@
 # Complementary Docs to agent-docs
 
-These templates come from [RepoBaseDocs](C:\Users\scott\Documents\RepoBaseDocs). They fill the gaps that agent-docs leaves open.
+These templates are adapted from RepoBaseDocs. They fill the project-state and project-specification gaps that agent-docs intentionally leaves open.
 
 ## How the Two Sets Fit Together
 
-agent-docs tells agents **how to work**: coding style, package structure, refactoring discipline, analysis methodology. It is stateless -- each session starts fresh unless the agent reads the codebase.
+agent-docs tells agents **how to work**: coding style, package structure, refactoring discipline, analysis methodology, and reusable writing formats. It is mostly method-oriented rather than project-state-oriented.
 
-These templates tell agents **what they're working on**: project intent, phase plans, task-level work packets, institutional memory. They carry state across sessions so agents never start from zero.
+These templates tell agents **what they're working on**: project intent, phase plans, task-level work packets, institutional memory, and current project state. They carry context across sessions so agents never start from zero.
 
 | Concern | agent-docs covers it | These templates cover it |
 |---------|---------------------|------------------------|
@@ -96,4 +96,4 @@ There are two small overlaps:
 2. Copy only the templates you need into your project's `docs/` directory
 3. Use agent-docs (code-style-short.md, packages.md, planning.md) for coding and analysis conventions
 4. Use these templates for project specification, state tracking, and multi-agent coordination
-5. CLAUDE.md in the project root should reference both sets -- run `/init` first for a baseline, then add status routing (Standard+)
+5. The project-root `CLAUDE.md` is the merge point: keep local build/test/architecture guidance there, then route to agent-docs for working style and to these templates for project state/spec tracking

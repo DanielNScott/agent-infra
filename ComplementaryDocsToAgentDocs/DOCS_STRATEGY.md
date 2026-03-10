@@ -6,7 +6,7 @@ _Last updated: <!-- Replace with current date -->_
 
 This document defines **when and how** project documentation must be updated. It is the enforcement mechanism for the RepoBaseDocs framework. Agents and humans follow these rules to prevent documentation drift.
 
-> **Adoption level:** This document is part of the **Full** adoption level. Projects at Lightweight (CLAUDE.md + BREADCRUMBS) or Standard (+ PROJECT_SPEC, EXECUTION_PLAN, PROJECT_STATE) do not need this file. See RepoBaseDocs README.md for adoption guidance.
+> **Adoption level:** This document is part of the **Full** adoption level. Projects at Lightweight (CLAUDE.md + BREADCRUMBS) or Standard (+ PROJECT_SPEC, EXECUTION_PLAN, PROJECT_STATE) do not need this file. If you copied this template from a shared docs source, keep a note in your project README or CLAUDE.md describing which adoption level this repo uses.
 
 ---
 
@@ -37,12 +37,12 @@ Tier 3 documents are implementation specs written before or during a feature bui
 | New phase/task created | -- | Add phase card | -- | -- | -- | Verify phase traces to spec | -- |
 | Gotcha discovered | Add if affects agent workflow | -- | Add to Critical Gotchas | -- | -- | -- | -- |
 | Architecture pattern identified | Update if changes big-picture architecture | -- | Add to Architecture Patterns | -- | -- | -- | -- |
-| Decision made | -- | Update phase if unblocked | -- | Update if work unblocked | Move to Decided (ADR) | Update Core Constraints if project-wide | -- |
+| Formal decision resolved | -- | Update phase if unblocked | -- | Update if work unblocked | Move to Decided (ADR) | Update Core Constraints if project-wide | -- |
 | New decision needed | -- | Add to phase prerequisites | -- | Add to Blocked if blocking | Add to Open table | -- | -- |
-| Session ending | -- | -- | Add Prompt History entry | Update Active/Done | -- | -- | Review for any unlogged decisions |
+| Session ending | -- | -- | Add Prompt History entry | Update Active/Done | -- | -- | Review for any unlogged execution forks |
 | Blocker encountered | -- | -- | Add gotcha if technical | Add to Blocked section | Add decision if needed | -- | -- |
 | Major scope change | Update if architecture changes | Update affected phases | -- | Update Active/Blocked | -- | Update Intent and Scope Boundaries | -- |
-| Agent hits design fork during execution | -- | -- | -- | -- | Add if unresolved | -- | Append new entry |
+| Agent hits design fork during execution | -- | -- | -- | -- | Add if unresolved or project-shaping | -- | Append new entry |
 | Test session completed | -- | -- | Add gotchas if any | -- | -- | -- | -- |
 | Build/test commands change | Update commands section | -- | -- | -- | -- | -- | -- |
 | Key conventions change | Update conventions section | -- | -- | -- | -- | -- | -- |
@@ -71,7 +71,7 @@ Project state is the **dashboard**. It answers "where are we?" at a glance. Upda
 
 ### OPEN_DECISIONS.md
 
-Open decisions track **choices that block or shape work**. Add decisions as soon as they are identified, even before options are clear. When a decision is made, move it to the Decided section using the ADR format -- never delete the Open entry, replace it with an ADR. Include rationale and consequences so future agents understand *why*.
+Open decisions track **choices that block or shape work**. Add decisions as soon as they are identified, even before options are clear. When a project-level or formally reviewed decision is made, move it to the Decided section using the ADR format -- never delete the Open entry, replace it with an ADR. Include rationale and consequences so future agents understand *why*.
 
 ### PROJECT_SPEC.md
 
@@ -79,7 +79,7 @@ The root specification. Update when project intent, constraints, or scope bounda
 
 ### CLOSED_DECISION_LOG.md
 
-Append-only during execution. Executing agents add entries when hitting forks not pre-resolved by task briefs or OPEN_DECISIONS defaults. Humans review periodically to promote recurring patterns to PROJECT_SPEC or OPEN_DECISIONS.
+Append-only during execution. Executing agents add entries when hitting forks not pre-resolved by task briefs or OPEN_DECISIONS defaults. Humans review periodically to promote recurring or project-shaping patterns to PROJECT_SPEC or OPEN_DECISIONS.
 
 ### docs/plans/* (Tier 3 — Implementation Artifacts)
 
@@ -117,7 +117,8 @@ Every agent must execute this protocol before ending a session. The purpose is t
 - Update **PROJECT_STATE.md** Quick Resume section if startup commands changed.
 - Update **PROJECT_STATE.md** Last Session Summary section with date, accomplishments, in-flight work, and top 3 next steps.
 - Update **BREADCRUMBS.md** with items 3 and 4 (add gotchas, update file map if files changed).
-- If a decision was made or deferred, update **OPEN_DECISIONS.md**.
+- If an execution-time fork was handled locally, append **CLOSED_DECISION_LOG.md**.
+- If a new blocker was identified or a formal decision was resolved, update **OPEN_DECISIONS.md**.
 
 ---
 
@@ -127,18 +128,18 @@ Use this checklist at the end of every agent session:
 
 - [ ] PROJECT_STATE.md reflects current Active/Done/Blocked status
 - [ ] Any new gotchas are recorded in BREADCRUMBS.md
-- [ ] Any decisions made are recorded in OPEN_DECISIONS.md as ADRs
+- [ ] Any formal decisions are recorded in OPEN_DECISIONS.md as ADRs
 - [ ] EXECUTION_PLAN.md phase statuses are current (Completed Work table updated)
 - [ ] CLAUDE.md updated if build commands, architecture, or key conventions changed
 - [ ] Session handoff information is recorded (what was done, what's next)
 - [ ] Consult OPEN_DECISIONS for default assumptions on relevant decisions
-- [ ] Log execution-time decisions to CLOSED_DECISION_LOG
+- [ ] Execution-time forks are logged to CLOSED_DECISION_LOG
 
 ---
 
 ## Framework Sync Check
 
-This project uses [RepoBaseDocs](C:\Users\scott\Documents\RepoBaseDocs). The framework evolves independently — new templates, updated guidance, and process changes are tracked in the framework's `CHANGELOG.md`.
+This project uses a RepoBaseDocs-derived template set. The framework evolves independently — new templates, updated guidance, and process changes are tracked in the source framework copy this project adopted from.
 
 **repobasedocs-version** (at the top of this file) records which framework version this project has incorporated. When the framework advances past a client's version, unacknowledged changes should be surfaced as action items.
 
@@ -146,7 +147,7 @@ This project uses [RepoBaseDocs](C:\Users\scott\Documents\RepoBaseDocs). The fra
 
 At the start of a session (after reading project docs, before implementation work):
 
-1. Read `C:\Users\scott\Documents\RepoBaseDocs\CHANGELOG.md`
+1. Read the `CHANGELOG.md` from your source copy of the framework
 2. Compare the latest version against this file's `repobasedocs-version` marker
 3. If this project is behind:
    - List the new CHANGELOG entries and their `Affects:` tags

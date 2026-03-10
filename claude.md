@@ -1,4 +1,4 @@
-<!-- Replace /home/dan with your home directory path throughout this file. -->
+<!-- Replace example local paths throughout this file to match your environment. -->
 
 # Claude Instructions
 
@@ -51,20 +51,20 @@ Use `uv` for Python package management, never `pip install`.
 
 ## Resources to consult
 If you are working on a software project, please consult the following documents:
-- `/home/dan/code/agent-docs/packages.md`
-- `/home/dan/code/agent-docs/code-style-short.md`
+- `[agent-docs]/packages.md`
+- `[agent-docs]/code-style-short.md`
 
 If you are tasked with whole-project initial planning, consult:
-- `/home/dan/code/agent-docs/planning.md`
+- `[agent-docs]/planning.md`
 
 If you are writing an academic manuscript, please consult: 
-- `/home/dan/code/agent-docs/writing-style.md`
+- `[agent-docs]/writing-style.md` (if present)
 
 ## Resuming a project
 
 If you have just been directed to read this file or the agent-docs directory please also do the following:
-- Read the file /home/dan/code/agent-docs/code-style-short.md
-- run `python3 /home/dan/code/code-analysis-tools/run.py --tree --depth 4 [dir]` on the project directory
+- Read `[agent-docs]/code-style-short.md`
+- run your local code tree inspection command on the project directory
 - examine the resource tree you observe to understand implementation of this current project
 
 Report back with:
@@ -77,7 +77,7 @@ Do not add more to the report back.
 ## Investigating another project
 
 When investigating a project folder:
-- Run `python3 /home/dan/code/code-analysis-tools/run.py --tree --depth 4 [directory]` 
+- Run your local code tree inspection command on `[directory]` 
 - Read the local README.md file
 
 ## Refactoring a project

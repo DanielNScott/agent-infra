@@ -21,8 +21,8 @@ with PROJECT_SPEC Intent but be shorter — this is a summary for humans. -->
 ## Current State Summary
 
 <!-- Replace: One quantitative line summarizing the project's scope and health.
-Include concrete numbers — these are the source of truth that all other docs
-must match. Suggested metrics (use what applies to your project):
+Include concrete numbers. This dashboard summary must match EXECUTION_PLAN.md
+and any active task docs. Suggested metrics (use what applies to your project):
 - Test count and pass rate (e.g., "142 tests, all passing")
 - Test coverage percentage
 - API endpoint count
@@ -31,7 +31,8 @@ must match. Suggested metrics (use what applies to your project):
 - Build status (passing/failing)
 
 IMPORTANT: Numbers here must match across PROJECT_STATE, EXECUTION_PLAN,
-and TASK_BRIEFS. When in doubt, this file is the source of truth. -->
+and TASK_BRIEFS. If there is a conflict, resolve EXECUTION_PLAN first, then
+update this summary to match. -->
 
 ---
 
@@ -146,6 +147,6 @@ Read these documents in this order:
 1. **PROJECT_STATE.md** (this file) — Where we are
 2. **EXECUTION_PLAN.md** — What to build next
 3. **BREADCRUMBS.md** — What to watch out for
-4. **Your assigned TASK_BRIEF** — What specifically to do
+4. **Your assigned task brief or plan doc** — What specifically to do
 
 Do not rebuild completed work. The "What is Done" table above shows what's already built. Check BREADCRUMBS.md before starting — it contains gotchas that will save you time.

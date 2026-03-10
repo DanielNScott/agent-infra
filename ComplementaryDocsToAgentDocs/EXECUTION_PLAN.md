@@ -130,7 +130,7 @@ here? -->
 
 ## Open Decisions
 
-Decisions that affect the execution plan are tracked in [OPEN_DECISIONS.md](../OPEN_DECISIONS.md) (or the project's local copy). Reference them here when a phase is blocked by an unresolved decision.
+Decisions that affect the execution plan are tracked in [OPEN_DECISIONS.md](./OPEN_DECISIONS.md) (or the project's local equivalent). Reference them here when a phase is blocked by an unresolved decision.
 
 ---
 

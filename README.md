@@ -21,14 +21,14 @@ The main file, `claude.md` should be attached to Claude Code via startup hook. I
 - `template-conversation.md` conversation summary format
 - `template-audit-bug.md` bug audit report format
 - `template-readme.md` README format for projects and sub-packages
-- `ComplementaryDocsToAgentDocs/` project specification and state tracking templates (from [RepoBaseDocs](C:\Users\scott\Documents\RepoBaseDocs))
+- `ComplementaryDocsToAgentDocs/` project specification and state tracking templates adapted from RepoBaseDocs
 
 ## Setup
 
 To use this package, you must:
 
 - Add `claude.md` as a startup hook (or point to it via package level CLAUDE.md)
-- replace `/home/dan/code/agent-docs/` with your clone path throughout
+- replace example local paths with your clone path throughout
 - remove or replace specialized tool instructions (search for e.g. python3 in md files)
 
 How to configure the hook in Claude Code's global settings (`~/.claude/settings.json`):
@@ -38,7 +38,7 @@ How to configure the hook in Claude Code's global settings (`~/.claude/settings.
     "startup": [
       {
         "type": "command",
-        "command": "cat /home/dan/code/agent-docs/claude.md"
+        "command": "cat /path/to/agent-docs/claude.md"
       }
     ]
   }
