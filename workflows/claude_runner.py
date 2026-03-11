@@ -10,9 +10,17 @@ from pathlib import Path
 
 
 SCRIPT_DIR = Path(__file__).parent
-AGENTS_DIR = SCRIPT_DIR / "agents"
+REPO_DIR = SCRIPT_DIR.parent
+AGENTS_DIR = REPO_DIR / "agents"
 SHARED_FILE = AGENTS_DIR / "shared.md"
 WORKSPACE_DIR = SCRIPT_DIR / "workspace"
+
+# Path substitutions applied when building prompts for Docker.
+# Real paths in agent files are swapped to docker mount paths.
+DOCKER_PATH_SUBS = [
+    (str(REPO_DIR) + "/agent_docs/", "/data/agent-docs/"),
+    ("AGENT_INFRA_DIR/agent_docs/", "/data/agent-docs/"),
+]
 
 
 # Project-scoped directories
@@ -71,21 +79,46 @@ def archive_reports(project):
 
 # Prompt assembly
 
-def build_prompt(agent_type, task, session_uuid=None):
+def strip_frontmatter(text):
+    """Strip YAML frontmatter block from markdown text."""
+    if text.startswith("---"):
+        end = text.find("\n---", 3)
+        if end != -1:
+            return text[end + 4:].lstrip("\n")
+    return text
+
+
+def apply_docker_paths(text, project):
+    """Substitute real paths with docker mount paths."""
+    for real, docker in DOCKER_PATH_SUBS:
+        text = text.replace(real, docker)
+    # Project working directory maps to /workspace
+    text = text.replace("the project's `reports/`", "`/workspace/reports/`")
+    text = text.replace("the project's `planning/`", "`/workspace/planning/`")
+    text = text.replace("project's `reports/`", "`/workspace/reports/`")
+    text = text.replace("project's `planning/`", "`/workspace/planning/`")
+    return text
+
+
+def build_prompt(agent_type, task, project, session_uuid=None):
     """Assemble full prompt from lifecycle, agent config, and task."""
 
     if session_uuid is None:
         session_uuid = uuid.uuid4().hex[:8]
 
-    # Load instruction files
+    # Load and prepare instruction files
     lifecycle = load_text(SHARED_FILE)
-    agent_instructions = load_text(AGENTS_DIR / f"{agent_type}.md")
+    agent_text = strip_frontmatter(load_text(AGENTS_DIR / f"{agent_type}.md"))
+
+    # Apply docker path substitutions
+    lifecycle = apply_docker_paths(lifecycle, project)
+    agent_text = apply_docker_paths(agent_text, project)
 
     # Assemble prompt
     prompt = f"""{lifecycle}
 
 ---
-{agent_instructions}
+{agent_text}
 
 ---
 Agent Type: {agent_type}
@@ -102,7 +135,7 @@ USER TASK:
 
 def run_agent(agent_type, task, project):
     """Run a Claude agent with the given task in a project workspace."""
-    prompt = build_prompt(agent_type, task)
+    prompt = build_prompt(agent_type, task, project)
 
     result = subprocess.run(
         [str(SCRIPT_DIR / "docker-claude.sh"), project, prompt],

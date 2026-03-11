@@ -14,10 +14,10 @@ install:
 	@uv tool install --editable $(REPO_DIR)/agent_tools
 	@printf "\n"
 	@printf "$(BOLD)Symlinking agents and skills into $(CLAUDE_DIR)...$(RESET)\n"
-	@printf "  ln -sfn $(REPO_DIR)/agents/subagents $(AGENTS_DIR)/agent-infra\n"
+	@printf "  ln -sfn $(REPO_DIR)/agents $(AGENTS_DIR)/agent-infra\n"
 	@printf "  ln -sfn $(REPO_DIR)/skills/SKILL $(SKILLS_DIR)/agent-infra-SKILL (per skill)\n"
 	@mkdir -p $(AGENTS_DIR) $(SKILLS_DIR)
-	@ln -sfn $(REPO_DIR)/agents/subagents $(AGENTS_DIR)/agent-infra
+	@ln -sfn $(REPO_DIR)/agents $(AGENTS_DIR)/agent-infra
 	@for skill in $(REPO_DIR)/skills/*/; do \
 		ln -sfn "$$skill" "$(SKILLS_DIR)/agent-infra-$$(basename $$skill)"; \
 	done

@@ -2,12 +2,8 @@
 
 ## Initialization
 
-1. Read `/data/agent-docs/code-style-short.md` for coding standards
+1. Read `AGENT_INFRA_DIR/agent_docs/code-style-short.md` for coding standards
 2. Note your agent type and generate a UUID for this session
-
-## Reference Code
-
-Reference projects demonstrating the preferred coding style are mounted at `/data/reference/`. List the directory to see what is available. Consult these for examples of good structure, naming, and style when needed.
 
 ## Code Priorities
 
@@ -47,7 +43,7 @@ Apply these naming conventions to all artifacts, including planning documents, s
 
 ## Task Finalization
 
-Before completing your task, write a report file to `/workspace/reports/` with the filename format:
+Before completing your task, write a report file to the project's `reports/` directory with the filename format:
 
 ```
 [YYYY-MM-DD-HH:MM:SS]_[agent_type]_[uuid].md
