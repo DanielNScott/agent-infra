@@ -20,8 +20,8 @@ This repository centralizes Claude Code instructions, coding guidelines, documen
 Install everything with:
 
 ```bash
-git clone <repo> /home/dan/code/agent-infra
-cd /home/dan/code/agent-infra
+git clone <repo> ~/code/agent-infra
+cd ~/code/agent-infra
 make install
 ```
 
@@ -33,7 +33,7 @@ Then add the startup hook to `~/.claude/settings.json`:
     "SessionStart": [
       {
         "type": "command",
-        "command": "cat /home/dan/code/agent-infra/agent_docs/claude.md"
+        "command": "cat ~/.claude/agent-infra-claude.md"
       }
     ]
   }

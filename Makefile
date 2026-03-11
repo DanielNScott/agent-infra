@@ -10,6 +10,7 @@ install:
 	mkdir -p $(AGENTS_DIR) $(SKILLS_DIR)
 	ln -sfn $(REPO_DIR)/agents/subagents $(AGENTS_DIR)/agent-infra
 	ln -sfn $(REPO_DIR)/skills $(SKILLS_DIR)/agent-infra
+	sed 's|AGENT_INFRA_DIR|$(REPO_DIR)|g' $(REPO_DIR)/agent_docs/claude.md > $(CLAUDE_DIR)/agent-infra-claude.md
 	python3 $(REPO_DIR)/agent_tools/agent_tools/configure_mcp.py install
 
 uninstall:
@@ -17,6 +18,7 @@ uninstall:
 	uv tool uninstall agent-tools
 	rm -f $(AGENTS_DIR)/agent-infra
 	rm -f $(SKILLS_DIR)/agent-infra
+	rm -f $(CLAUDE_DIR)/agent-infra-claude.md
 
 update:
 	uv tool install --editable $(REPO_DIR)/agent_tools

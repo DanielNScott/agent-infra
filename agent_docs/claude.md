@@ -1,5 +1,3 @@
-<!-- Replace /home/dan with your home directory path throughout this file. -->
-
 # Claude Instructions
 
 ## Table of Contents
@@ -51,19 +49,19 @@ Use `uv` for Python package management, never `pip install`.
 
 ## Resources to consult
 If you are working on a software project, please consult the following documents:
-- `/home/dan/code/agent-infra/agent_docs/packages.md`
-- `/home/dan/code/agent-infra/agent_docs/code-style-short.md`
+- `AGENT_INFRA_DIR/agent_docs/packages.md`
+- `AGENT_INFRA_DIR/agent_docs/code-style-short.md`
 
 If you are tasked with whole-project initial planning, consult:
-- `/home/dan/code/agent-infra/agent_docs/planning.md`
+- `AGENT_INFRA_DIR/agent_docs/planning.md`
 
 If you are writing an academic manuscript, please consult:
-- `/home/dan/code/agent-infra/agent_docs/writing-style.md`
+- `AGENT_INFRA_DIR/agent_docs/writing-style.md`
 
 ## Resuming a project
 
 If you have just been directed to read this file or the agent-infra directory please also do the following:
-- Read the file /home/dan/code/agent-infra/agent_docs/code-style-short.md
+- Read the file AGENT_INFRA_DIR/agent_docs/code-style-short.md
 - run `agent-tools --tree --depth 4 [dir]` on the project directory
 - examine the resource tree you observe to understand implementation of this current project
 
