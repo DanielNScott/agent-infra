@@ -51,20 +51,20 @@ Use `uv` for Python package management, never `pip install`.
 
 ## Resources to consult
 If you are working on a software project, please consult the following documents:
-- `/home/dan/code/agent-docs/packages.md`
-- `/home/dan/code/agent-docs/code-style-short.md`
+- `/home/dan/code/agent-infra/agent_docs/packages.md`
+- `/home/dan/code/agent-infra/agent_docs/code-style-short.md`
 
 If you are tasked with whole-project initial planning, consult:
-- `/home/dan/code/agent-docs/planning.md`
+- `/home/dan/code/agent-infra/agent_docs/planning.md`
 
-If you are writing an academic manuscript, please consult: 
-- `/home/dan/code/agent-docs/writing-style.md`
+If you are writing an academic manuscript, please consult:
+- `/home/dan/code/agent-infra/agent_docs/writing-style.md`
 
 ## Resuming a project
 
-If you have just been directed to read this file or the agent-docs directory please also do the following:
-- Read the file /home/dan/code/agent-docs/code-style-short.md
-- run `python3 /home/dan/code/code-analysis-tools/run.py --tree --depth 4 [dir]` on the project directory
+If you have just been directed to read this file or the agent-infra directory please also do the following:
+- Read the file /home/dan/code/agent-infra/agent_docs/code-style-short.md
+- run `agent-tools --tree --depth 4 [dir]` on the project directory
 - examine the resource tree you observe to understand implementation of this current project
 
 Report back with:
@@ -77,7 +77,7 @@ Do not add more to the report back.
 ## Investigating another project
 
 When investigating a project folder:
-- Run `python3 /home/dan/code/code-analysis-tools/run.py --tree --depth 4 [directory]` 
+- Run `agent-tools --tree --depth 4 [directory]` 
 - Read the local README.md file
 
 ## Refactoring a project

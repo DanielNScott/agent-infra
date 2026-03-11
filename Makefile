@@ -10,8 +10,10 @@ install:
 	mkdir -p $(AGENTS_DIR) $(SKILLS_DIR)
 	ln -sfn $(REPO_DIR)/agents/subagents $(AGENTS_DIR)/agent-infra
 	ln -sfn $(REPO_DIR)/skills $(SKILLS_DIR)/agent-infra
+	python3 $(REPO_DIR)/agent_tools/agent_tools/configure_mcp.py install
 
 uninstall:
+	python3 $(REPO_DIR)/agent_tools/agent_tools/configure_mcp.py uninstall
 	uv tool uninstall agent-tools
 	rm -f $(AGENTS_DIR)/agent-infra
 	rm -f $(SKILLS_DIR)/agent-infra
