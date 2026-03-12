@@ -7,7 +7,8 @@ This repository provides a reusable infrastructure layer for Claude Code project
 Installation...
 
 - installs an `agent-tools` CLI via `uv tool install`
-- symlinks agents and skills into `~/.claude/`
+- copies agents to `~/.claude/agents/agent-infra/` with paths resolved
+- symlinks skills into `~/.claude/skills/`
 - generates `~/.claude/agent-infra-claude.md` from `agent_docs/claude.md`
 - registers the MCP server in `~/.claude/settings.json`
 - registers the SessionStart hook in `~/.claude/settings.json`
@@ -22,6 +23,14 @@ The SessionStart hook runs agent-infra-startup.sh, which...
 - informs Claude about the code style to adhere to
 - shows claude the directory structure for the project
 
+## Project Structure
+
+- `agent_tools/` installable Python package exposing CLI and MCP server
+- `agent_docs/` Claude Code instructions, coding guidelines, and document templates
+- `agents/` agent definitions (pipeline prompt files and Claude Code subagents)
+- `skills/` slash command definitions
+- `workflows/` Docker-based pipeline orchestration
+- `docs/` project documentation and ADRs
 
 ## Components
 
@@ -64,14 +73,27 @@ The SessionStart hook runs agent-infra-startup.sh, which...
 - `tree` prints a project resource tree to orient Claude in a codebase
 - `update-readme` writes or updates a README file
 
-## Project Structure
+### agents
 
-- `agent_tools/` installable Python package exposing CLI and MCP server
-- `agent_docs/` Claude Code instructions, coding guidelines, and document templates
-- `agents/` agent definitions (pipeline prompt files and Claude Code subagents)
-- `skills/` slash command definitions
-- `workflows/` Docker-based pipeline orchestration
-- `docs/` project documentation and ADRs
+`agents` contains agent definitions used both by Claude Code (as subagents) and by the Docker pipeline (as prompt files). Each file has SDK frontmatter for Claude discovery and a body with full role instructions. `make install` copies them to `~/.claude/agents/agent-infra/` with paths resolved.
+
+- `iterative` implements a task through decompose-implement-review cycles
+- `agent-architecture` produces a resource tree, pipeline sketch, and README
+- `agent-specification` produces call graphs, contracts, and function specs
+- `agent-implementation` writes code from planning artifacts
+- `agent-review` audits implemented modules against specs and contracts
+- `agent-manager` scopes tasks into work units and reviews completed units
+- `shared.md` lifecycle instructions prepended by the Docker runner (not a subagent)
+
+### workflows
+
+`workflows` contains Docker-based pipeline orchestration for running agents in isolated workspaces. Three pipelines are available, each dispatching agents via `claude_runner.py` and `docker-claude.sh`.
+
+- `pipeline_iterative.py` single-session iterative development
+- `pipeline_managed.py` multi-session development with manager oversight
+- `pipeline_comprehensive.py` multi-stage architecture-through-implementation pipeline
+- `claude_runner.py` prompt assembly and Docker dispatch
+- `docker-claude.sh` Docker wrapper handling auth and volume mounts
 
 ## Setup
 
