@@ -10,26 +10,33 @@ Three pipelines built on a shared runner that assembles agent prompts and dispat
 
 Single-session iterative development. Runs one Docker invocation.
 
-- Agent decomposes task, implements simplest necessary items, reviews for drift and excess
-- Cycles decompose-implement-reduce until complete
+1. Agent decomposes task, selects simplest necessary items
+2. Agent implements selected items
+3. Agent reviews for drift, excess, and duplication
+4. Repeat until complete
 
 ### Managed Pipeline
 
 Multi-session managed development with manager oversight.
 
-- Manager agent scopes task into ordered work units
-- Iterative agent implements each unit in its own session
-- Manager reviews each result, decides proceed/adjust/done
-- On adjust, manager rewrites remaining units before continuing
+1. Manager agent scopes task into ordered work units
+2. Iterative agent implements the next unit in its own session
+3. Manager reviews result, decides proceed/adjust/done
+4. On adjust, manager rewrites remaining units
+5. Repeat from 2 until done
 
 ### Comprehensive Pipeline
 
-Multi-stage development from architecture through implementation. Each stage is a separate agent invocation producing planning artifacts consumed by the next.
+Multi-stage development from architecture through implementation. Each stage has a production agent and an audit agent. Audit-revise loops run until the audit agent passes or max cycles are reached.
 
-- Architecture agent drafts resource tree and pipeline sketch
-- Specification agent makes structural then detail passes
-- Implementation agent writes code per module from specs
-- Planning artifacts accumulate in /workspace/planning/
+1. Architecture agent drafts resource tree, structural specs, and README
+2. Architecture audit loop (audit, revise, re-audit up to 3 cycles)
+3. Specification agent produces per-module function specifications
+4. Specification audit loop
+5. Implementation agent writes code per module from specs
+6. Implementation audit loop
+
+Each production agent receives a checklist generated from its instruction steps. The agent fills the checklist with `[x]` (satisfied) or `[!]` (unsatisfied) marks. The audit agent reviews the filled checklist alongside its own independent evaluation.
 
 ## Module Structure
 
@@ -37,21 +44,28 @@ Multi-stage development from architecture through implementation. Each stage is 
 - pipeline_iterative.py -- iterative pipeline orchestration
 - pipeline_managed.py -- managed pipeline orchestration
 - pipeline_comprehensive.py -- comprehensive pipeline orchestration
+- generate_checklist.py -- checklist generation from agent step lists
+- validate.py -- planning artifact validation (wrapper over agent_tools)
 - docker-claude.sh -- Docker wrapper for auth and volume mounts
 - Dockerfile -- container image definition
 
 ## Agent Definitions
 
-Agent instructions live in agents/. Each agent gets shared lifecycle instructions (shared.md) prepended to its role definition. The runner assembles the full prompt automatically.
+Agent instructions live in `../agents/`. The runner strips frontmatter and assembles the full prompt from the agent file directly.
 
 Iterative and managed pipeline agents:
 - iterative.md -- decompose-implement-reduce loop
 - agent-manager.md -- task scoping and inter-session review
 
-Comprehensive pipeline agents:
-- agent-architecture.md -- resource tree and pipeline sketch
-- agent-specification.md -- dependency analysis and function specs
+Comprehensive pipeline production agents:
+- agent-architecture.md -- resource tree, structural specs, README
+- agent-specification.md -- per-module function specifications
 - agent-implementation.md -- code implementation from specs
+
+Comprehensive pipeline audit agents:
+- agent-audit-architecture.md -- audit resource tree and structural specs
+- agent-audit-specification.md -- audit function specifications
+- agent-audit-implementation.md -- audit code against specs and contracts
 
 ## Configuration
 
@@ -71,7 +85,8 @@ AGENT_DOCS and CODE_ANALYSIS are mounted at /data/agent-docs/ and /data/code-ana
 ## Directories
 
 - workspace/ -- project subdirectories, each mounted into containers
-- workspace/project/reports/ -- agent spin-down reports
+- workspace/project/reports/ -- agent reports, checklists, and audit reports
+- workspace/project/planning/ -- architecture and specification artifacts
 - agents/ -- current agent definitions
 - archive/ -- archived report bundles
 
@@ -95,9 +110,12 @@ python3 pipeline_managed.py --project myproj --task "Build feature X" --restart
 
 # Comprehensive pipeline -- architecture, specification, implementation
 python3 pipeline_comprehensive.py --project myproj --task "Add feature X"
+python3 pipeline_comprehensive.py --project myproj --task "X" --plan-only
 python3 pipeline_comprehensive.py --project myproj --only-architecture --task "task"
-python3 pipeline_comprehensive.py --project myproj --only-spec-structural
+python3 pipeline_comprehensive.py --project myproj --only-specification
 python3 pipeline_comprehensive.py --project myproj --only-implement --modules mod_a
+python3 pipeline_comprehensive.py --project myproj --only-audit
+python3 pipeline_comprehensive.py --project myproj --task "task" --restart
 ```
 
 ## Authentication
@@ -114,8 +132,8 @@ OAuth tokens expire in 8-12 hours; run `claude login` to refresh.
 
 Agents consult reference projects at /data/reference/ for structure, naming, and figure style guidance. See Configuration above for mount setup.
 
-## Code Analysis Tools
+## In-Container Tools
 
-Code analysis utilities are mounted read-only at /data/code-analysis-tools/ inside containers:
-
-- run.py -- generate resource trees
+The Docker image includes agent-tools, providing:
+- agent-validate -- planning artifact validation (e.g. `agent-validate architecture .`)
+- agent-tools -- code analysis (resource trees, call graphs, def-use, reverse deps)
