@@ -1,5 +1,14 @@
 Instructions:
-Please use the commit template below. Please formulate problems as general diagnoses and they address function. Solutions are specific fixes. Decisions capture non-obvious choices and reasoning, not implementation. Omit Decisions if the commit has no real architectural decisions. Begin the headline with [wip] or [pass] depending on whether this is a work in progress commit which breaks things, or is an all-tests-pass commit. 
+Please use the commit template below. Carefully adhere to the following specifications for each section:
+
+(1) The problems section is for general, functional diagnoses, not implementation details. 
+(2) Solutions are statements of implementations and how they resolve functional problems
+(3) Architectural Trade-Off Decisions capture non-obvious choices between alternatives and the tradeoffs accepted
+(4) Reasoning and Related Notes capture context and motivation. 
+
+Omit Architectural Trade-Off Decisions if there are none. Omit Reasoning and Related Notes if there is nothing to add. 
+
+Begin the headline with [wip] or [pass] depending on whether this is a work in progress commit which breaks things, or is an all-tests-pass commit.
 
 [[wip | pass] One sentence summary of the commit.]
 
@@ -13,7 +22,12 @@ Solutions:
 - [what was changed, 10 words or less, no formatting]
 [...]
 
-Decisions:
+Architectural Trade-Off Decisions:
 - [why this way and not another, 10 words or less, no formatting]
 - [what tradeoff was accepted, 10 words or less, no formatting]
+[...]
+
+Reasoning and Related Notes:
+- [context, motivation, or rationale not captured above, 10 words or less, no formatting]
+- [key items from discussion during work not captured above, 10 words or less, no formatting]
 [...]
