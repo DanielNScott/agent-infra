@@ -9,19 +9,18 @@ Installation...
 - installs an `agent-tools` CLI via `uv tool install`
 - copies agents to `~/.claude/agents/agent-infra/` with paths resolved
 - symlinks skills into `~/.claude/skills/`
-- generates `~/.claude/agent-infra-claude.md` from `agent_docs/claude.md`
+- installs `claude.md` and `code-style-short.md` into `~/.claude/CLAUDE.md`
 - registers the MCP server in `~/.claude/settings.json`
 - registers the SessionStart hook in `~/.claude/settings.json`
 
+If `~/.claude/CLAUDE.md` already exists, the installer prompts to replace, append, or skip.
+
 As a result:
+  - Claude receives instructions and code style guidelines via CLAUDE.md on every session
   - a set of skills is available via `/agent-infra-{skill}`
   - skills and the MCP link to templates and code tools
-  - startup hooks are defined orienting Claude to new projects
 
-The SessionStart hook runs agent-infra-startup.sh, which...
-- provides basic startup instructions
-- informs Claude about the code style to adhere to
-- shows claude the directory structure for the project
+The SessionStart hook runs agent-infra-startup.sh, which shows Claude the directory structure for the current project.
 
 Separately, `workflows/` provides Docker-based pipelines that run agents autonomously. These do not require installation — they use `docker-claude.sh` to dispatch agents into isolated containers with project workspaces mounted in.
 
@@ -51,8 +50,8 @@ Separately, `workflows/` provides Docker-based pipelines that run agents autonom
 
 `agent_docs` contains instruction and template files that Claude loads at session start.
 
-- `claude.md` top-level instruction file loaded via the SessionStart hook
-- `code-style-short.md` coding style guidelines
+- `claude.md` top-level instruction file installed into `~/.claude/CLAUDE.md`
+- `code-style-short.md` coding style guidelines installed into `~/.claude/CLAUDE.md`
 - `packages.md` package structure and separation of concerns guidelines
 - `planning.md` planning guidelines for whole-project tasks
 - `writing-style.md` academic manuscript style guidelines
@@ -70,7 +69,9 @@ Separately, `workflows/` provides Docker-based pipelines that run agents autonom
 - `callgraph` builds and displays a call graph for codebase analysis
 - `defuse` traces data flow for debugging or new package development
 - `draft-commit-message` drafts a commit message from staged changes
+- `explain-it-to-me` provides a structured explanation of a system, module, or concept
 - `revdeps` evaluates reverse dependencies across a package
+- `standalone-audit` runs a quality audit checking for LLM-specific antipatterns
 - `summarise-conversation` records the outcome of a discussion
 - `tree` prints a project resource tree to orient Claude in a codebase
 - `update-readme` writes or updates a README file
@@ -87,6 +88,7 @@ Separately, `workflows/` provides Docker-based pipelines that run agents autonom
 - `agent-audit-specification` audits function specifications
 - `agent-audit-implementation` audits code against specs and contracts
 - `agent-manager` scopes tasks into work units and reviews completed units
+- `agent-standalone-quality-audit` audits code for conceptual fidelity and LLM antipatterns
 
 ### workflows
 
