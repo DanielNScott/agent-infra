@@ -15,9 +15,11 @@
 - et cetera
 
 **Considerations discussed:**
-- most important consideration from conversation
-- next most important one
-- etc.
+- [top-level bullets name the topic or decision area; a reader should understand the consideration from this bullet alone]
+  - [sub-bullets give granular reasoning, implementation details, or supporting logic]
+  - [another sub-point]
+- [next consideration topic]
+  - [detail]
 
 **Synthesized thoughts:**
 - main point of agreement

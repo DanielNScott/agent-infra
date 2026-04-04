@@ -16,11 +16,11 @@ Diagnosis:
 - [when or how it manifests, 10 words or less]
 - [what the consequence is, 10 words or less]
 
-[1-3 sentences describing the fix chosen and why. If a reasonable
+[1-3 sentences describing the fix (or suggestion) chosen and why. If a
 alternative was considered and rejected, state what it was and why.
-Do not describe alternatives that were never seriously considered.]
+Do not describe trivial alternatives, or those not seriously considered.]
 
-Implementation:
+Implementation [If applicable]:
 - [concrete change made, 10 words or less]
 - [concrete change made, 10 words or less]
 [...]
